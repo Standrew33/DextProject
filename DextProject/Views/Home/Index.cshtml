@@ -1,0 +1,76 @@
+﻿
+@*@(Html.DevExtreme().Form()
+    .ID("dxForm")
+    .FormData(new {
+            dxDateBox = "",
+    })
+    .Items(formItems => {
+        formItems.AddSimple()
+            .DataField("dxDateBox")
+            .IsRequired(false)
+            .Label(l => l.Text("Date"))
+            .Editor(e => e.DateBox());
+    })
+)*@
+<br />
+<form id="dxForm">
+
+@(Html.DevExtreme().Button()
+    .ID("dxButton")
+    .Text("Select")
+    .OnClick("SelectDate")
+)
+
+@(Html.DevExtreme().DateBox()
+    .ID("dxDateBox")
+    .Value(DateTime.Now)
+    .Visible(true)
+)
+
+</form>
+@(Html.DevExtreme().Popup()
+    .ID("dxPopup")
+    .Title("Select Date")
+    .Width(300)
+    .Height(200)
+    .Visible(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+)
+
+@(Html.DevExtreme().DateBox()
+    .ID("dxDateBoxPup")
+    .Value(DateTime.Now)
+    .Visible(false)
+    .OnClosed("SelectedDate")
+)
+
+<script>
+    /*$("#dxPopup").dxPopup({
+        contentTemplate: function () {
+            return $("#dxDateBox")
+        }
+    });*/
+
+    $("#dxPopup").dxPopup({
+        contentTemplate: function () {
+            return $("#dxDateBoxPup")
+        }
+    });
+
+    function SelectDate() {
+        $("#dxPopup").dxPopup("show");
+        $("#dxDateBoxPup").dxDateBox({
+            visible: true
+        });
+    }
+
+    function SelectedDate() {
+        $("#dxDateBox").dxDateBox({
+            value: $("#dxDateBoxPup")
+                .dxDateBox("instance")
+                .option('value')
+        });
+    }
+</script>
+
